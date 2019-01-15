@@ -1,20 +1,27 @@
 from rest_framework import serializers
 
-from django.db.models import Min, Max
+from core.models import Agreement, Period
 
-from core.models import Agreement
+
+class PeriodSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Period
+        fields = ['start', 'end', 'status']
 
 
 class AgreementSerializer(serializers.ModelSerializer):
 
-    calendar = serializers.SerializerMethodField()
+    periods = PeriodSerializer(read_only=True, many=True)
 
     class Meta:
         model = Agreement
-        fields = ['calendar']
+    fields = ['start_date',
+              'stop_date',
+              'company',
+              'negotiator',
+              'periods']
 
-    def get_calendar(self, obj):
-        all_agr = Agreement.objects.all()
-        min_year = all_agr.aggregate(Min('start_date'))
-        max_year = all_agr.aggregate(Max('stop_date'))
-        return [i for i in range(min_year['start_date__min'].year, max_year['stop_date__max'].year + 1)]
+
+class CalendarSerializer(serializers.Serializer):
+    calendar = serializers.ReadOnlyField()

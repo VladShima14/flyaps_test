@@ -1,11 +1,17 @@
 from django.contrib import admin
 
-from .models import Agreement, Company, Status, Period
+from .models import Agreement, Company, Country, Period, Status
 
 
 class PeriodsInLine(admin.TabularInline):
     # model = Agreement.period.through
     model = Period
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'iso_code']
+    search_fields = ['name', 'iso_code']
 
 
 @admin.register(Period)
@@ -28,7 +34,6 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(Agreement)
 class AgreementAdmin(admin.ModelAdmin):
-    # exclude = ('period',)
     list_display = ['company', 'negotiator', 'start_date', 'stop_date']
     search_fields = ['company__title', 'start_date', 'stop_date']
     list_filter = ('company__title',)

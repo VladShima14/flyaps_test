@@ -1,13 +1,41 @@
-from django.shortcuts import render
+from django.db.models import Max, Min
+from rest_framework import generics, views
+from rest_framework.response import Response
 
-from rest_framework import generics
-from rest_framework.generics import ListAPIView
+from .api.serializers import AgreementSerializer, CalendarSerializer
+from .filters import AgreementFilter
+from .models import Agreement, Period
 
-from .models import Agreement
-from .api.serializers import AgreementSerializer
 # Create your views here.
 
 
-class CalendarApi(generics.ListAPIView):
-    queryset = Agreement.objects.all()
+class CalendarApi(views.APIView):
+    def get(self):
+        all_periods = Period.objects.all()
+        min_year = all_periods.aggregate(Min('start'))
+        max_year = all_periods.aggregate(Max('end'))
+        calendar = {}
+
+        for year in range(min_year['start__min'].year,
+                          max_year['end__max'].year + 1):
+            calendar[year] = []
+
+        for year in calendar.keys():
+            for i in range(1, 13):
+                i = 0
+                calendar[year].append(i)
+
+        for year in calendar.keys():
+            for period in all_periods:
+                if period.end.year == year:
+                    calendar[year][period.end.month - 1] += 1
+
+        mydata = [{'calendar': calendar}]
+        results = CalendarSerializer(mydata, many=True).data
+        return Response(results)
+
+
+class AgreementApi(generics.ListAPIView):
     serializer_class = AgreementSerializer
+    queryset = Agreement.objects.all()
+    filter_backends = (AgreementFilter, )
