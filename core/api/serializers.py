@@ -16,11 +16,7 @@ class AgreementSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Agreement
-    fields = ['start_date',
-              'stop_date',
-              'company',
-              'negotiator',
-              'periods']
+        fields = ['start_date', 'stop_date', 'company', 'negotiator', 'periods']
 
 
 class CalendarSerializer(serializers.Serializer):

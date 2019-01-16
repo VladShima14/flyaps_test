@@ -43,8 +43,6 @@ INSTALLED_APPS = [
 
     # frameworks
     'rest_framework',
-    'django_countries',
-    'django_filters'
 ]
 
 MIDDLEWARE = [
