@@ -8,8 +8,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+myvenv/
 env/
-myenv/
 build/
 develop-eggs/
 dist/
@@ -85,7 +85,7 @@ celerybeat-schedule
 
 # virtualenv
 .venv
-myenv/
+myvenv/
 venv/
 ENV/
 
@@ -112,3 +112,5 @@ site_media/
 *.sqlite3
 
 local.py
+
+myvenv/
