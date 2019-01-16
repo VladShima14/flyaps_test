@@ -1,8 +1,10 @@
+# Byte-compiled / optimized / DLL files
 *.log
+.idea
 __pycache__/
 *.py[cod]
+
+# Distribution / packaging
+myvenv/
+
 db.sqlite3
-migrations/
-media/
-.idea
-myvenv
